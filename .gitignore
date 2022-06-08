@@ -3,3 +3,4 @@ setup.py
 build
 dist
 Auto_ML_study.egg-info
+.DS_Store
