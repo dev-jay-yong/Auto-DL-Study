@@ -1,10 +1,9 @@
 import pandas as pd
-from xgboost import XGBClassifier
-
+from xgboost import XGBClassifier, XGBRegressor
 from errors import exceptions as ex
 
 
-class XGBoost():
+class StudyXGBoost:
     def __init__(self):
         super().__init__()
 
@@ -43,8 +42,23 @@ class XGBoost():
               "8.결측치를 내부적으로 처리해줍니다.\n"
               )
 
+    def explain_train_method(self):
+        print("학습 방법에 관하여".center(100, "-") +
+              "\n모델을 학습시키는 방법은 크게 회귀와 분류로 나뉘어집니다.\n"
+              "우선 회귀는 보통 0과 1사이의 연속된 값을 예측하는 경우에 사용합니다.\n"
+              "이와 반대로 분류 같은 경우는 특정 범주 내의 값중에서 결과를 예측하는 경우 사용합니다.\n"
+              "만약 StudyXGBoost에서 학습 방법을 자동으로 설정할 시 유일값(유니크) 값의 개수에 따라서 \n"
+              "10개 이하는 분류 모델, 10개 초과는 회귀모델로 학습이 진행됩니다. \n"
+              )
+
     def get_hyper_param_structure(self):
         pass
+
+    def set_train_method(self, train_method):
+        train_method_info = {'회귀': XGBRegressor, '분류': XGBClassifier, '자동 설정': 'auto'}
+
+        if train_method not in train_method_info.keys():
+            raise ex.NotFoundTrainMethod(train_method)
 
     def train(self, df: pd.DataFrame, label: str):
         if label not in df.columns:
@@ -56,6 +70,10 @@ if __name__ == '__main__':
     # XGBoost().explain_boosting()
     # XGBoost().explain_xg_boost()
     # XGBoost().explain_advantage()
-    XGBoost().help()
+
+    xgboost = StudyXGBoost()
+    xgboost.explain_train_method()
+    xgboost.set_train_method("temp")
+    # xgboost.train(df, label)
     # df = pd.DataFrame({"A": [1, 2], "B": [3, 4]})
     # XGBoost().train(df, 'C')
